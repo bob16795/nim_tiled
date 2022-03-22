@@ -296,14 +296,16 @@ proc loadTileset*(theXml: XmlNode): TiledTileset =
   result.columns      = theXml.attr("columns").parseInt
   result.properties   = newTiledProperties(theXml.child("properties"))
 
-  let theImage = theXml[0]
+  var theImage = theXml[0]
 
   # Load tiles in the tileset
   var first = true
   for tile in theXml:
     if first: first = false; continue
+    if tile.attr("width") != "":
+      theImage = tile
+      continue
     if tile.attr("id") == "":
-      echo "tile has not id: ", tile
       continue
     let tileid = tile.attr("id").parseInt
 
